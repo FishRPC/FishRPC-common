@@ -34,7 +34,7 @@ public class DiscardedPolicy implements RejectedExecutionHandler {
 
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            System.err.println("RPC Thread pool [{}] is exhausted, executor="+executor.toString()+", threadName");
+            System.err.println("RPC Thread pool [%s] is exhausted, executor="+executor.toString()+", threadName");
         }
 
         if (!executor.isShutdown()) {

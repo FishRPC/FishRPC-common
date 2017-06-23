@@ -41,7 +41,7 @@ public class ProtostuffUtil {
             throw new IllegalStateException(e.getMessage(), e);
         } finally {
             buffer.clear();
-           // System.out.println("serializer spend : "+(System.currentTimeMillis() - start));
+            System.out.println("serializer spend : "+(System.currentTimeMillis() - start));
         }
     }
 
@@ -62,7 +62,7 @@ public class ProtostuffUtil {
         } catch (Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
         }finally{
-        	 // System.out.println("deserializer spend : "+(System.currentTimeMillis() - start));
+        	 System.out.println("deserializer spend : "+(System.currentTimeMillis() - start));
         }
     }
 }

@@ -31,7 +31,7 @@ public class CallerRunsPolicy extends ThreadPoolExecutor.CallerRunsPolicy {
 
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            System.err.println("RPC Thread pool [{}] is exhausted, executor="+executor.toString()+", threadName");
+            System.err.println("RPC Thread pool [%s] is exhausted, executor="+executor.toString()+", threadName");
         }
 
         super.rejectedExecution(runnable, executor);

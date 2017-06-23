@@ -31,7 +31,7 @@ public class AbortPolicy extends ThreadPoolExecutor.AbortPolicy {
 
     public void rejectedExecution(Runnable runnable, ThreadPoolExecutor executor) {
         if (threadName != null) {
-            System.err.println("RPC Thread pool [{}] is exhausted, executor="+executor.toString()+", threadName");
+            System.err.println("RPC Thread pool [%s] is exhausted, executor="+executor.toString()+", threadName");
         }
         String msg = String.format("RpcServer["
                         + " Thread Name: %s, Pool Size: %d (active: %d, core: %d, max: %d, largest: %d), Task: %d (completed: %d),"

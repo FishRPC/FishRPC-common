@@ -2,20 +2,19 @@ package com.fish.rpc.serialize.protostuff;
 
 import java.util.List;
 
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
-
 import com.fish.rpc.dto.FishRPCRequest;
 import com.fish.rpc.dto.FishRPCResponse;
+import com.fish.rpc.serialize.protostuff.pool.ProtostuffSerialize;
+import com.fish.rpc.serialize.protostuff.pool.ProtostuffSerializePool;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class ProtostuffDecoder extends ByteToMessageDecoder {
+	private ProtostuffSerializePool pool= ProtostuffSerializePool.getProtostuffPoolInstance();
 	private boolean isResponse;
-	private static Objenesis objenesis = new ObjenesisStd(true);
-	public ProtostuffDecoder(boolean isResponse){
+ 	public ProtostuffDecoder(boolean isResponse){
 		this.isResponse = isResponse;
 	}
 	@Override
@@ -37,10 +36,11 @@ public class ProtostuffDecoder extends ByteToMessageDecoder {
         } else {
             byte[] messageBody = new byte[messageLength];
             in.readBytes(messageBody);
-
             try {
-                Object obj =ProtostuffUtil.deserializer(messageBody, isResponse?FishRPCResponse.class:FishRPCRequest.class);
+            	ProtostuffSerialize decoder =  pool.borrow();
+            	Object obj = decoder.deserialize(messageBody, isResponse?FishRPCResponse.class:FishRPCRequest.class);
                 out.add(obj);
+                pool.restore(decoder);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

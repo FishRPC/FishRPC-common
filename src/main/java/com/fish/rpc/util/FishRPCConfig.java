@@ -33,6 +33,14 @@ public class FishRPCConfig {
 		return Long.parseLong(String.valueOf(prop.getProperty(key, ""+defaultValue)));
 	} 
 	
+	public static boolean getBooleanValue(String key,boolean defaultValue){
+		return Boolean.parseBoolean(String.valueOf(prop.getProperty(key, ""+defaultValue)));
+	} 
+	
+	public static boolean onDebug(){
+		return getBooleanValue("fish.rpc.debug.mode",false);
+	}
+	
 	public static void init(final String fileName) throws Exception{
 		try {
 			URL url =  Thread.currentThread().getContextClassLoader().getResource(""); 
