@@ -9,7 +9,11 @@ public class FishRPCRequest {
 	private String methodName;
 	private Class<?>[] paramsType;
 	private Object[] paramsVal;
+	private final long requestTime = System.currentTimeMillis();
 	
+	public long getRequestTime() {
+		return requestTime;
+	}
 	public String getRequestId() {
 		return requestId;
 	}

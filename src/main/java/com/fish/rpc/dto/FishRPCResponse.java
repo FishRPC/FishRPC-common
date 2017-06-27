@@ -8,6 +8,11 @@ public class FishRPCResponse {
 	private String error;
 	private int code;
 	private Object result;
+	private final long responseTime = System.currentTimeMillis();
+	
+	public long getResponseTime() {
+		return responseTime;
+	}
 	public String getRequestId() {
 		return requestId;
 	}
