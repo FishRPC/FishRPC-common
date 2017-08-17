@@ -9,18 +9,72 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import io.netty.util.internal.StringUtil;
+
 public class FishRPCConfig {
     public static final String SYSTEM_PROPERTY_THREADPOOL_REJECTED_POLICY_ATTR = "com.fish.rpc.parallel.rejected.policy";
     public static final String SYSTEM_PROPERTY_THREADPOOL_QUEUE_NAME_ATTR = "com.fish.rpc.parallel.queue";
     public static final int PARALLEL = Math.max(2, Runtime.getRuntime().availableProcessors());
 	public static Properties prop = new Properties();  
 	
-	public static void initClient() throws Exception{
-		init("fishRPC-client.properties");
+	public static void initClient(String configPath) throws Exception{
+		
+		File configFile = null;
+		
+		if( !StringUtil.isNullOrEmpty(configPath) ){
+			configFile = new File(configPath);
+		}
+		
+		if( configFile == null || !configFile.exists() || !configFile.isFile() ){
+			URL url =  Thread.currentThread().getContextClassLoader().getResource(""); 
+			File defaultFile = new File(url.getFile()); 
+			if(defaultFile.isDirectory()){ 
+				File[] files = defaultFile.listFiles(new FilenameFilter(){
+					@Override
+					public boolean accept(File dir, String name) { 
+						return name.equals("fishRPC-client.properties");
+					} 
+				});
+				
+				configFile = (files!=null&&files.length>0)?files[0]:null;
+			} 
+		}
+		
+		if(configFile==null || !configFile.exists()){
+			throw new Exception("FishRPC client-config not found .");
+		}
+		
+		
+		init(configFile);
 	}
 	
-	public static void initServer() throws Exception{
-		init("fishRPC-server.properties");
+	public static void initServer(String configPath) throws Exception{
+		File configFile = null;
+		
+		if( !StringUtil.isNullOrEmpty(configPath) ){
+			configFile = new File(configPath);
+		}
+		
+		if( configFile == null || !configFile.exists() || !configFile.isFile() ){
+			URL url =  Thread.currentThread().getContextClassLoader().getResource(""); 
+			File defaultFile = new File(url.getFile()); 
+			if(defaultFile.isDirectory()){ 
+				File[] files = defaultFile.listFiles(new FilenameFilter(){
+					@Override
+					public boolean accept(File dir, String name) { 
+						return name.equals("fishRPC-server.properties");
+					} 
+				});
+				
+				configFile = (files!=null&&files.length>0)?files[0]:null;
+			} 
+		}
+		
+		if(configFile==null || !configFile.exists()){
+			throw new Exception("FishRPC server-config not found .");
+		}
+		
+		init(configFile);
 	}
 	
 	public static String getStringValue(String key,String defaultValue){
@@ -41,36 +95,15 @@ public class FishRPCConfig {
 		return getBooleanValue("fish.rpc.debug.mode",false);
 	}
 	
-	public static void init(final String fileName) throws Exception{
+	public static void init(final File configFile) throws Exception{
 		try {
-			URL url =  Thread.currentThread().getContextClassLoader().getResource(""); 
-			File file = new File(url.getFile()); 
-			File fishRPC = null;
-			if(file.isDirectory()){ 
-				File[] files = file.listFiles(new FilenameFilter(){
-					@Override
-					public boolean accept(File dir, String name) { 
-						return name.equals(fileName);
-					} 
-				});
-				
-				fishRPC = (files!=null&&files.length>0)?files[0]:null;
-			}
-			
-			if(fishRPC==null || !fishRPC.exists()){
-				throw new Exception("FishRPC not found "+fileName+" file.");
-			}
-				
+			System.out.println("init client config :"+configFile.getPath());
 			Map<String,Object> keyMap = new HashMap<String,Object>();
-			
-			InputStream is = ClassLoader.getSystemResourceAsStream(fishRPC.getName());
-			if(null == is) {
-				is = new FileInputStream(fishRPC);
-			}
+			InputStream is  = new FileInputStream(configFile);
 			prop.load(is);
 			for(Object key : prop.keySet()){
 				if(keyMap.containsKey((String)key)){
-					throw new Exception("FishRPC配置key重复，文件="+fishRPC.getName()+",key="+key);
+					throw new Exception("FishRPC配置key重复，文件="+configFile.getPath()+",key="+key);
 				}else{
 					keyMap.put((String)key, null);
 				}

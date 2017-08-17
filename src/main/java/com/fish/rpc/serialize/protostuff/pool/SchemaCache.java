@@ -10,6 +10,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
 public class SchemaCache {
+	
     private static class SchemaCacheHolder {
         private static SchemaCache cache = new SchemaCache();
     }
@@ -19,7 +20,7 @@ public class SchemaCache {
     }
 
     private Cache<Class<?>, Schema<?>> cache = CacheBuilder.newBuilder()
-            .maximumSize(1024).expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(1024).expireAfterWrite(30, TimeUnit.DAYS)
             .build();
 
     private Schema<?> get(final Class<?> cls, Cache<Class<?>, Schema<?>> cache) {
