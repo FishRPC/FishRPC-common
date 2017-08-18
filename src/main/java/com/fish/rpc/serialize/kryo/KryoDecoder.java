@@ -2,19 +2,14 @@ package com.fish.rpc.serialize.kryo;
 
 import java.util.List;
 
-import com.fish.rpc.dto.FishRPCRequest;
-import com.fish.rpc.dto.FishRPCResponse;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 public class KryoDecoder extends ByteToMessageDecoder {
   
-	private boolean isResponse;
- 	public KryoDecoder(boolean isResponse){
-		this.isResponse = isResponse;
-	}
+	 
+ 	public KryoDecoder(){}
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
         if (in.readableBytes() < 4) {
@@ -35,7 +30,7 @@ public class KryoDecoder extends ByteToMessageDecoder {
             byte[] messageBody = new byte[messageLength];
             in.readBytes(messageBody);
             try { 
-            	Object obj = KryoSerialize.deserialize(messageBody, isResponse?FishRPCResponse.class:FishRPCRequest.class);
+            	Object obj = KryoSerialize.deserialize(messageBody);
                 out.add(obj);
             } catch (Exception ex) {
                 ex.printStackTrace();

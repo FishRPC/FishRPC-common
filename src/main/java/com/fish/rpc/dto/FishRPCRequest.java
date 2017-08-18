@@ -1,15 +1,24 @@
 package com.fish.rpc.dto;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-public class FishRPCRequest {
+public class FishRPCRequest implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String requestId;
 	private String className;
 	private String methodName;
 	private Class<?>[] paramsType;
 	private Object[] paramsVal;
 	private final long requestTime = System.currentTimeMillis();
+	
+	public FishRPCRequest(){}
 	
 	public long getRequestTime() {
 		return requestTime;
