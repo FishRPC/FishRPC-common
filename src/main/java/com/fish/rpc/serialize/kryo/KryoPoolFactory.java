@@ -16,10 +16,10 @@ public class KryoPoolFactory {
 	private KryoFactory factory = new KryoFactory() {
 		public Kryo create() {
 			Kryo kryo = new Kryo();
-			kryo.setReferences(false);
+			kryo.setReferences(true);
 			// 把已知的结构注册到Kryo注册器里面，提高序列化/反序列化效率
-			kryo.register(FishRPCRequest.class);
-			kryo.register(FishRPCResponse.class); 
+			//kryo.register(FishRPCRequest.class);
+			//kryo.register(FishRPCResponse.class); 
  			kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
 			return kryo;
 		}
