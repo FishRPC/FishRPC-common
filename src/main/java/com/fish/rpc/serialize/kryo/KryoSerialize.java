@@ -14,20 +14,17 @@ public class KryoSerialize {
 	 * 序列化（对象 -> 字节数组）
 	 */
 	public synchronized static  byte[] serialize(Object obj) {
-		FishRPCLog.debug("serialize obj %s", obj);
-
+      	FishRPCLog.debug("[KryoSerialize][serialize][obj:%s]", obj);
 		long start = System.currentTimeMillis();
 		Kryo kryo = pool.borrow();
-		
 		Output output = new Output(1, -1);
 		kryo.writeClassAndObject(output, obj);
 		output.flush();
 		byte[] ret = output.toBytes();
 		output.close();
 		pool.release(kryo);
-		
-		FishRPCLog.debug("serialized obj %s, spend %s ms", obj,(System.currentTimeMillis() - start));
-		return ret;
+      	FishRPCLog.debug("[KryoSerialize][serialize][耗时: %s ms][obj:%s]",(System.currentTimeMillis() - start),obj);
+ 		return ret;
 		 
 	}
 
@@ -35,14 +32,14 @@ public class KryoSerialize {
 	 * 反序列化（字节数组 -> 对象）
 	 */
 	public synchronized static Object deserialize(byte[] data) {
-		FishRPCLog.debug("deserialize data size %s byte", data.length);
+      	FishRPCLog.debug("[KryoSerialize][deserialize][size:%s]", data.length);
 		long start = System.currentTimeMillis();
 		Kryo kryo = pool.borrow();	
 		Input input = new Input(data);
 		Object rtn = kryo.readClassAndObject(input);
 		input.close();
 		pool.release(kryo);
-		FishRPCLog.debug("deserialized data size %s byte, spend %s ms", data.length,(System.currentTimeMillis() - start));
+      	FishRPCLog.debug("[KryoSerialize][deserialize][size:%s][耗时: %s ms]", data.length,(System.currentTimeMillis() - start));
 		return rtn;
 	} 
 }

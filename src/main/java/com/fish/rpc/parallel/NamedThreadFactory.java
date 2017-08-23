@@ -33,7 +33,7 @@ public class NamedThreadFactory implements ThreadFactory {
     private final ThreadGroup threadGroup;
 
     public NamedThreadFactory() {
-        this("rpcserver-threadpool-" + threadNumber.getAndIncrement(), false);
+        this("FishRPC-server-threadpool-" + threadNumber.getAndIncrement(), false);
     }
 
     public NamedThreadFactory(String prefix) {

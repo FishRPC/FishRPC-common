@@ -1,18 +1,3 @@
-/**
- * Copyright (C) 2017 FishRPC Group Holding Limited
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.fish.rpc.parallel;
 
 import java.util.concurrent.ArrayBlockingQueue;
@@ -31,6 +16,7 @@ import com.fish.rpc.parallel.policy.DiscardedPolicy;
 import com.fish.rpc.parallel.policy.RejectedPolicy;
 import com.fish.rpc.parallel.policy.RejectedPolicyType;
 import com.fish.rpc.util.FishRPCConfig;
+import com.fish.rpc.util.FishRPCLog;
 
  
 public class FishRPCThreadPool {
@@ -67,8 +53,8 @@ public class FishRPCThreadPool {
         return null;
     }
     public static Executor getExecutor(int threads, int queues) {
-        System.out.println("ThreadPool Core[threads:" + threads + ", queues:" + queues + "]");
-        String name = "RpcThreadPool";
+     	FishRPCLog.debug("[FishRPCThreadPool][getExecutor][threads：%s][queues：%s]", threads,queues);
+        String name = "FishRPCThreadPool";
         ThreadPoolExecutor executor = new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
                 createBlockingQueue(queues),
                 new NamedThreadFactory(name, true), createPolicy());

@@ -97,7 +97,6 @@ public class FishRPCConfig {
 	
 	public static void init(final File configFile) throws Exception{
 		try {
-			System.out.println("init client config :"+configFile.getPath());
 			Map<String,Object> keyMap = new HashMap<String,Object>();
 			InputStream is  = new FileInputStream(configFile);
 			prop.load(is);
