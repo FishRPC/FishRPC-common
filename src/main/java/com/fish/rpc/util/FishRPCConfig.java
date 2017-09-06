@@ -40,11 +40,9 @@ public class FishRPCConfig {
 			} 
 		}
 		
-		if(configFile==null || !configFile.exists()){
+		/*if(configFile==null || !configFile.exists()){
 			throw new Exception("FishRPC client-config not found .");
-		}
-		
-		
+		}*/
 		init(configFile);
 	}
 	
@@ -97,6 +95,12 @@ public class FishRPCConfig {
 	
 	public static void init(final File configFile) throws Exception{
 		try {
+			
+			if( configFile == null ){
+				prop.clear();
+				return ;
+			}
+			
 			Map<String,Object> keyMap = new HashMap<String,Object>();
 			InputStream is  = new FileInputStream(configFile);
 			prop.load(is);

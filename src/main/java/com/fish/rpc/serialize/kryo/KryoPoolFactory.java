@@ -6,6 +6,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Kryo.DefaultInstantiatorStrategy;
 import com.esotericsoftware.kryo.pool.KryoFactory;
 import com.esotericsoftware.kryo.pool.KryoPool;
+import com.fish.rpc.dto.FishRPCHeartbeat;
 import com.fish.rpc.dto.FishRPCRequest;
 import com.fish.rpc.dto.FishRPCResponse;
 
@@ -18,14 +19,15 @@ public class KryoPoolFactory {
 			Kryo kryo = new Kryo();
 			kryo.setReferences(true);
 			// 把已知的结构注册到Kryo注册器里面，提高序列化/反序列化效率
-			//kryo.register(FishRPCRequest.class);
-			//kryo.register(FishRPCResponse.class); 
+			kryo.register(FishRPCRequest.class);
+			kryo.register(FishRPCResponse.class); 
+			kryo.register(FishRPCHeartbeat.class);
  			kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
 			return kryo;
 		}
 	};
 
-	private KryoPool pool = new KryoPool.Builder(factory).build();
+	private KryoPool pool = new KryoPool.Builder(factory).softReferences().build();
 
 	private KryoPoolFactory() {
 	}

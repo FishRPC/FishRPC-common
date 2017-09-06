@@ -17,12 +17,12 @@ package com.fish.rpc.parallel;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fish.rpc.util.FishRPCLog;
+
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class NamedThreadFactory implements ThreadFactory {
-
-    private static final AtomicInteger threadNumber = new AtomicInteger(1);
 
     private final AtomicInteger mThreadNum = new AtomicInteger(1);
 
@@ -33,7 +33,7 @@ public class NamedThreadFactory implements ThreadFactory {
     private final ThreadGroup threadGroup;
 
     public NamedThreadFactory() {
-        this("FishRPC-server-threadpool-" + threadNumber.getAndIncrement(), false);
+        this("FishRPC-", false);
     }
 
     public NamedThreadFactory(String prefix) {
@@ -50,6 +50,7 @@ public class NamedThreadFactory implements ThreadFactory {
     public Thread newThread(Runnable runnable) {
         String name = prefix + mThreadNum.getAndIncrement();
         Thread ret = new Thread(threadGroup, runnable, name, 0);
+        FishRPCLog.info("新建线程:[%s]", name);
         ret.setDaemon(daemoThread);
         return ret;
     }

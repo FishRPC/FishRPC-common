@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
+import com.fish.rpc.util.FishRPCConfig;
+
 public class FishRPCResponse implements Serializable{
 
 	/**
@@ -15,13 +17,18 @@ public class FishRPCResponse implements Serializable{
 	private String error;
 	private int code;
 	private Object result;
-	private final long responseTime = System.currentTimeMillis();
+	
+	
+	private long serverReceiveAtTime;
+	
+	private long serverStartBusinessTime;
+	private long serverDoneBusinessTime;
+	
+	private long serverDoneSendDataTime;
 	
 	public FishRPCResponse(){}
 	
-	public long getResponseTime() {
-		return responseTime;
-	}
+	 
 	public String getRequestId() {
 		return requestId;
 	}
@@ -46,8 +53,51 @@ public class FishRPCResponse implements Serializable{
 	}
 	public void setCode(int code) {
 		this.code = code;
+	}  
+
+	public long getServerReceiveAtTime() {
+		return serverReceiveAtTime;
 	}
-	public String toString() {
-        return ReflectionToStringBuilder.toString(this);
+
+
+	public void setServerReceiveAtTime(long serverReceiveAtTime) {
+		this.serverReceiveAtTime = serverReceiveAtTime;
+	}
+
+
+	public long getServerStartBusinessTime() {
+		return serverStartBusinessTime;
+	}
+
+
+	public void setServerStartBusinessTime(long serverStartBusinessTime) {
+		this.serverStartBusinessTime = serverStartBusinessTime;
+	}
+
+
+	public long getServerDoneBusinessTime() {
+		return serverDoneBusinessTime;
+	}
+
+
+	public void setServerDoneBusinessTime(long serverDoneBusinessTime) {
+		this.serverDoneBusinessTime = serverDoneBusinessTime;
+	}
+ 
+	public long getServerDoneSendDataTime() {
+		return serverDoneSendDataTime;
+	}
+
+
+	public void setServerDoneSendDataTime(long serverDoneSendDataTime) {
+		this.serverDoneSendDataTime = serverDoneSendDataTime;
+	}
+
+
+	public String toString() { 
+        if( FishRPCConfig.getBooleanValue("fish.rpc.debug.mode", false) ){
+        	ReflectionToStringBuilder.toString(this);
+        }
+		return requestId;
     }
 }

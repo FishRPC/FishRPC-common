@@ -39,25 +39,27 @@ public class FishRPCThreadPool {
         return null;
     }
     private static BlockingQueue<Runnable> createBlockingQueue(int queues) {
-        BlockingQueueType queueType = BlockingQueueType.fromString(System.getProperty(FishRPCConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NAME_ATTR, "LinkedBlockingQueue"));
+        BlockingQueueType queueType = BlockingQueueType
+        		.fromString(System.getProperty(
+        				FishRPCConfig.SYSTEM_PROPERTY_THREADPOOL_QUEUE_NAME_ATTR, "LinkedBlockingQueue"));
 
         switch (queueType) {
             case LINKED_BLOCKING_QUEUE:
                 return new LinkedBlockingQueue<Runnable>();
             case ARRAY_BLOCKING_QUEUE:
-                return new ArrayBlockingQueue<Runnable>(FishRPCConfig.PARALLEL * queues);
+                return new ArrayBlockingQueue<Runnable>(queues==-1?5000:queues);
             case SYNCHRONOUS_QUEUE:
                 return new SynchronousQueue<Runnable>();
         }
 
         return null;
     }
-    public static Executor getExecutor(int threads, int queues) {
+    public static Executor getExecutor(String name,int threads, int queues) {
      	FishRPCLog.debug("[FishRPCThreadPool][getExecutor][threads：%s][queues：%s]", threads,queues);
-        String name = "FishRPCThreadPool";
-        ThreadPoolExecutor executor = new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(threads, 50, 0, TimeUnit.MILLISECONDS,
                 createBlockingQueue(queues),
-                new NamedThreadFactory(name, true), createPolicy());
+                new NamedThreadFactory(name, false), 
+                createPolicy());
         return executor;
     } 
 }
